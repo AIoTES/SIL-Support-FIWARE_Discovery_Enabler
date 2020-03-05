@@ -1,0 +1,89 @@
+{
+  "name": "aiotesenabler",
+  "version": "1.0.0",
+  "description": "A minimal enabler to allow integration between AIoTES framework and FIWARE",
+  "main": "index.js",
+  "config": {
+    "imageRepo": "aiotes/fiware-enabler"
+  },
+  "scripts": {
+    "pretsc": "rimraf ./dist",
+    "tsc": "tsc",
+    "lint": "npx eslint ./app/**/*.ts",
+    "prod": "npm run tsc && node ./dist/server.js",
+    "test": "npx mocha -r ts-node/register --timeout 30000 app/**/*.spec.ts",
+    "coverage": "nyc npm run test",
+    "run-prod": "cross-env NODE_ENV=production DEBUG=app:* node ./dist/server.js",
+    "run-dev": "cross-env DEBUG=app:* MONGO_URI=mongodb://localhost:12017 nodemon app/server.ts",
+    "predockerize": "npm run tsc",
+    "dockerize": "cross-conf-env docker build . -t $npm_package_config_imageRepo:$npm_package_version",
+    "postdockerize": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_imageRepo:latest"
+  },
+  "author": "Alvaro Martinez <amartinez@mysphera.com>",
+  "contributors": [],
+  "keywords": [
+    "AIOTES",
+    "bridge",
+    "FIWARE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/express": "^4.17.3",
+    "@types/mongoose": "^5.7.3",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^4.1.1",
+    "cross-env": "^7.0.1",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.3",
+    "swagger-jsdoc": "^3.5.0",
+    "swagger-ui-express": "^4.1.3"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/chai": "^4.2.10",
+    "@types/expect.js": "^0.3.29",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.7.7",
+    "@types/sinon": "^7.5.2",
+    "@types/supertest": "^2.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "chai": "^4.2.0",
+    "cross-conf-env": "^1.1.2",
+    "eslint": "^6.8.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^7.1.0",
+    "mocked-env": "^1.3.2",
+    "mongo-unit": "^2.0.0",
+    "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
+    "rimraf": "^3.0.2",
+    "sinon": "^9.0.0",
+    "source-map-support": "^0.5.16",
+    "supertest": "^4.0.2",
+    "ts-mocha": "^6.0.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "check-coverage": true,
+    "include": [
+      "app/**/*.ts"
+    ],
+    "exclude": [
+      "app/**/*.spec.ts"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ]
+  }
+}

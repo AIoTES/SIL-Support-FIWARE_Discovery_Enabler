@@ -1,0 +1,16 @@
+FROM node:12.16.1-alpine3.9
+
+WORKDIR /app
+
+COPY package*.json  ./
+COPY ./dist/ ./dist/
+
+ENV PORT=3000
+
+RUN npm ci --only=production
+
+EXPOSE $PORT
+
+ENTRYPOINT ["npm"]
+
+CMD ["run" , "run-prod"]

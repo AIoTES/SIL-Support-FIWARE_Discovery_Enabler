@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  aiotes2fiware:
+    image: aiotes/fiware-enabler
+    environment:
+      NODE_ENV: "production"
+      MONGO_URI: "mongodb://localhost:9999"
+    ports:
+      - "3000:3000"
