@@ -16,9 +16,15 @@ import { Request, Response, ErrorRequestHandler } from 'express';
  *         - error
  *         - message
  */
-export interface GenericError {
+export class GenericError {
     error: string;
+
     message: string;
+
+    constructor(error: string, message: string) {
+        this.message = message;
+        this.error = error;
+    }
 }
 
 export function errorHandler(err: ErrorRequestHandler, req: Request, res: Response): void {
