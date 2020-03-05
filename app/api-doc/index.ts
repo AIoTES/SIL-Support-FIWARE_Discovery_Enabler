@@ -7,7 +7,7 @@ const logger = debug('app:server:api-docs');
 const options: Options = {
 
     // list of files to be processed
-    apis: ['../**/*.ts'],
+    apis: ['dist/**/*.js!(.*)', 'app/**/!(*.spec).ts'],
 
     basePath: '/',
 
