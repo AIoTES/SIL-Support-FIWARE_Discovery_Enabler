@@ -39,17 +39,19 @@ router.get('/',
         const skip = Number(req.query.offset);
         const limit = Number(req.query.limit || 0);
         const service = req.get(FIWARE_SERVICE);
+        const lastCheck = req.query.lastCheck;
         // filtering parameters
         const query = {
             '_id.type': req.query.type,
             '_id.servicePath': {
                 $regex: req.get(FIWARE_SERVICE_PATH)?.replace('/#', '/(.*)'),
                 $options: 'i'
-            }
+            },
+            'creDate': { $gte: lastCheck / 1000 }
         };
         // Get the total number of elements matching the filter
         const total: number = await entity.countDocuments(query);
-        // query for results
+        // define the processing pipeline
         entity.aggregate([
             { $match: query },
             { $sort: { '_id.id': 1 } },
@@ -67,17 +69,19 @@ router.get('/',
                     'attrs': 1,
                     'creDate': 1,
                 }
-            }
-        ].filter(x => x !== undefined))
-            .then((result: Document[]) => {
-                logger(`getDevices returned ${result.length} results`);
-                // Set the header with the results range
-                res.set(CONTENT_RANGE, `items ${skip}-${skip + result.length - 1}/${total}`);
-                conn.close().then(() => {
-                    logger('Connection to db closed')
-                });
-                res.status(200).json(result);
+            },
+        ]
+            // if limit was not set, we have an 'undefined' stage in the pipeline we have to remove
+            .filter(x => x !== undefined)
+        ).then((result: Document[]) => {
+            logger(`getDevices returned ${result.length} results`);
+            // Set the header with the results range
+            res.set(CONTENT_RANGE, `items ${skip}-${skip + result.length - 1}/${total}`);
+            conn.close().then(() => {
+                logger('Connection to db closed')
             });
+            res.status(200).json(result);
+        });
     },
 
 );
