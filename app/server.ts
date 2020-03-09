@@ -11,7 +11,8 @@ import { Server } from 'http';
 const logger = debug('app:server');
 
 const app: express.Application = express();
-const port = 3000;
+
+const port = Number(process.env.HTTP_PORT || 3000); // default port 3000, but configurable from env variables
 
 const initTimeStamp: number = Date.now();
 
