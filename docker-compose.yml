@@ -1,15 +1,23 @@
-version: "3"
+version: "3.5"
 
 services:
-  aiotes2fiware:
-    image: aiotes/fiware-enabler
+  aiotes2fiware_test:
+    image: registry.locs.es/aiotes/fiware-enabler
     environment:
       NODE_ENV: "prod"
-      MONGO_URI: "mongodb://localhost:27017"
+      MONGO_URI: "mongodb://mongo:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
       HTTP_PORT: 3000
       API_KEY: ""
       API_CONTACT_NAME: ""
       API_CONTACT_URL: ""
       API_CONTACT_EMAIL: amartinez@mysphera.com
+      DEBUG: "app:*"
     ports:
-      - "3000:3000"
+      - "13000:3000"
+    networks:
+      - test_backend
+
+networks:
+  test_backend:
+    name: test_backend
+    external: true

@@ -2,7 +2,6 @@ import swaggerJsdoc, { ApiInformation, Options } from 'swagger-jsdoc';
 import { Application } from 'express';
 import { JsonObject, serve, setup } from 'swagger-ui-express';
 import { debug } from 'debug';
-import { license, version } from '../../package.json';
 
 const logger = debug('app:server:api-docs');
 const options: Options = {
@@ -35,11 +34,11 @@ const options: Options = {
             },
             // The license information for the exposed API
             license: {
-                name: license,
+                name: process.env.npm_package_license,
                 url: undefined,
             },
             // The version of the OpenAPI document
-            version: version,
+            version: process.env.npm_package_version,
         } as ApiInformation,
         /*
          * An array of Server Objects, which provide connectivity information to a target server. If the

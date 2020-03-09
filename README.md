@@ -13,3 +13,9 @@ The docker container accepts a series of environment variables that are specific
 |API_CONTACT_URL|The URL pointing to the contact information||
 |API_CONTACT_EMAIL|The email address of the contact person/organization||
 
+
+
+
+
+server {                                                       server_name mw2mw-aiotes.locs.es;                                                                                                                                                                                                                                              listen 80;                                                                                                                                                                                                                                                                     return 301 https://$host$request_uri;                                                                                                                                                                                                                                  }
+
