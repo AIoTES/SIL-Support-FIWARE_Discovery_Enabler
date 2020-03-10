@@ -1,4 +1,4 @@
-import { Request, Response, ErrorRequestHandler } from 'express';
+import { ErrorRequestHandler, Request, Response } from 'express';
 
 /**
  * @swagger
@@ -75,12 +75,16 @@ export function missingParameter(res: Response, param: string): void {
 export function handleMongoConnectionError(err: Error, res: Response): void {
     switch (err.name) {
         case 'MongoServerSelectionError':
-            res.status(500).send({
+            res.status(500).json({
                 error: 'DatabaseConnectionError',
                 message: err.message,
             } as GenericError);
+            break;
+        case 'MongoParseError':
+            badRequest(res, err.name, 'Invalid connection string');
+            break;
         default:
-            res.status(500).send({
+            res.status(500).json({
                 error: 'UnexpectedError',
                 message: err.message,
             } as GenericError);

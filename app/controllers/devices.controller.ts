@@ -26,11 +26,11 @@ router.get('/',
     // verify the Fiware-ServicePath is present or set a default value otherwise
     checkHeader.bind(null, FIWARE_SERVICE_PATH, '/#'),
     // Verify the type parameter exists; otherwise, throw a 400 error
-    verifyParamExists.bind(null, 'type', undefined),
+    verifyParamExists.bind(null, 'type', undefined, ','),
     // verfify lastCheck param exists or set it to a default of 01/01/2015 @ 12:00am (UTC)
-    verifyParamExists.bind(null, 'lastCheck', '1420070400000'),
-    verifyParamExists.bind(null, 'offset', '0'),
-    verifyParamExists.bind(null, 'limit', ''),
+    verifyParamExists.bind(null, 'lastCheck', '1420070400000', undefined),
+    verifyParamExists.bind(null, 'offset', '0', undefined),
+    verifyParamExists.bind(null, 'limit', '', undefined),
     createModel.bind(null, FiwareEntitySchema, 'Entity'),
     async (req: Request, res: Response) => {
         // define variables
@@ -42,7 +42,7 @@ router.get('/',
         const lastCheck = req.query.lastCheck;
         // filtering parameters
         const query = {
-            '_id.type': req.query.type,
+            '_id.type': (req.query.type instanceof RegExp) ? { $regex: req.query.type, $options: 'i' } : req.query.type,
             '_id.servicePath': {
                 $regex: req.get(FIWARE_SERVICE_PATH)?.replace('/#', '/(.*)'),
                 $options: 'i'

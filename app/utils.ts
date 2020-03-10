@@ -41,12 +41,15 @@ export function checkHeader(
  * without further modifications.
  * @param name the param name
  * @param defaultValue the default value
+ * @param separatorChar allows defining an array of values separated using this character. If set to undefined,
+ * the param is assumed single-valued
  * @param req the request object
  * @param res the response object
  * @param next the next function
  */
 export function verifyParamExists(
-    name: string, defaultValue: string | undefined, req: Request, res: Response, next: NextFunction): void {
+    name: string, defaultValue: string | undefined, separatorChar: string | undefined, req: Request, res: Response,
+    next: NextFunction): void {
     logger(`checking the presence of parameter ${name}`);
     if (req.query[name] === undefined && defaultValue === undefined) {
         // TODO: what to do i this case?
@@ -54,6 +57,20 @@ export function verifyParamExists(
     } else if (req.query[name] === undefined && defaultValue !== undefined) {
         req.query[name] = defaultValue;
     }
+    // handle multivalue
+    if (separatorChar !== undefined && req.query[name] !== undefined) {
+        const elements = (req.query[name] as string).split(separatorChar).filter(x => x !== undefined && x !== '');
+        logger(elements);
+        if (elements && elements.length > 1) {
+            // when multivalue detected, change the param to a regular expression
+            req.query[name] = new RegExp('^(' + elements.join('|').replace('*', '(.*)') + ')$');
+        } else if (elements && elements.length === 1) {
+            // handle the case when the original param is prepended or appended wit the separatorChar
+            req.query[name] = elements[0];
+        }
+    }
+
+
     next();
 }
 
@@ -87,7 +104,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             } as ConnectionOptions);
-
+            debug('successfully created a connection to the database');
             req.body.connection = connection;
             next();
             resolve();
@@ -96,10 +113,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
             handleMongoConnectionError(err, res);
             resolve();
         }
-
-        // if(err && err.name === 'MongoParseError')
     });
-
 }
 
 /**

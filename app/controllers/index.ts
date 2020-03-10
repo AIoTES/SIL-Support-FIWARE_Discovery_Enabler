@@ -20,7 +20,8 @@ export function RegisterRoutes(app: Application): void {
      *        required: true
      *        schema:
      *          type: string
-     *        description: the device type
+     *        description: the device type. It can be a comma-separated list of device types. E.g.,
+     *          ```type=Device1```  or ```type=Device1,Device2```
      *      - in: query
      *        name: lastCheck
      *        required: false
