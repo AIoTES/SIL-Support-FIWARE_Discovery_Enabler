@@ -32,6 +32,18 @@ export const FIWARE_SERVICE_PATH = 'Fiware-ServicePath';
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     api_key:
+ *       type: apiKey
+ *       name: X-API-KEY # name of 'header', 'query' or 'cookie'
+ *       in: header # can be 'header', 'query' or 'cookie'
+ *       x-apikeyInfoFunc:
+ */
+export const X_API_KEY = 'X-API-KEY';
+
+/**
+ * @swagger
+ * components:
  *    headers:
  *      Content-Range:
  *        schema:
@@ -85,4 +97,6 @@ export const LIMIT_PARAM = 'limit';
 
 export const SERVICE_PREFIX = 'ORION_SERVICE_PREFIX';
 export const MONGO_URI = 'MONGO_URI';
+
+export const API_KEY = 'API_KEY';
 

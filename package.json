@@ -1,6 +1,6 @@
 {
   "name": "aiotesenabler",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A minimal enabler to allow integration between AIoTES framework and FIWARE",
   "main": "index.js",
   "config": {
@@ -14,7 +14,7 @@
     "test": "npx mocha -r ts-node/register --timeout 30000 app/**/*.spec.ts",
     "coverage": "nyc npm run test",
     "run-prod": "cross-env NODE_ENV=production DEBUG=app:* node ./dist/app/server.js",
-    "run-dev": "cross-env DEBUG=app:* MONGO_URI=mongodb://localhost:12017 nodemon app/server.ts",
+    "run-dev": "cross-env DEBUG=app:* MONGO_URI=mongodb://localhost:12017 API_KEY=abcde12345 nodemon app/server.ts",
     "dockerize": "cross-conf-env docker build . -t $npm_package_config_imageRepo:$npm_package_version",
     "postdockerize": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_imageRepo:latest"
   },

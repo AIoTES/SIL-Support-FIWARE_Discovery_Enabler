@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
-import { badRequest, forbiddenRequest, handleMongoConnectionError, missingHeaderError } from './errorHandlers';
+import {
+    badRequest,
+    forbiddenRequest, handleMongoConnectionError, missingHeaderError,
+    unAuthorizedRequest
+} from './errorHandlers';
 import { ConfigParams } from './config';
 import mongoose, { Connection, ConnectionOptions, Schema } from 'mongoose';
-import { FIWARE_SERVICE } from './constants';
+import { FIWARE_SERVICE, X_API_KEY } from './constants';
 import { debug } from 'debug';
 
 const logger = debug('app:utils');
@@ -70,7 +74,6 @@ export function verifyParamExists(
         }
     }
 
-
     next();
 }
 
@@ -122,10 +125,22 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
  * @param res the response object
  * @param next the next function
  */
-export function verifyAppSecret(req: Request, res: Response, next: NextFunction): void {
-    logger('verifying app secret...');
-    // TODO: implement this function
-    next();
+export function verifyApiKey(req: Request, res: Response, next: NextFunction): void {
+    logger('verifying API KEY...');
+    const apiKey = req.get(X_API_KEY);
+    if (apiKey === undefined) {
+        // return unauthorised
+        badRequest(res, 'AuthError', 'Missing API KEY');
+        //
+    } else {
+        // validate apiKey
+        const config = ConfigParams();
+        if (apiKey === config.apiKey) {
+            next();
+        } else {
+            unAuthorizedRequest(res, 'The provided API KEY is not valid');
+        }
+    }
 }
 
 /**

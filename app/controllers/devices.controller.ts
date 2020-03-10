@@ -1,5 +1,5 @@
 import {
-    checkDatabaseExists, checkHeader, connectDatabase, createModel, verifyAppSecret,
+    checkDatabaseExists, checkHeader, connectDatabase, createModel, verifyApiKey,
     verifyParamExists
 } from '../utils';
 import { debug } from 'debug';
@@ -13,7 +13,7 @@ const logger = debug('app:devices:controller');
 
 // middleware specific to this router
 router.use(
-    verifyAppSecret.bind(null),
+    verifyApiKey.bind(null),
     // verify the Fiware-Service header is present
     checkHeader.bind(null, FIWARE_SERVICE, undefined),
     // create connection to database
