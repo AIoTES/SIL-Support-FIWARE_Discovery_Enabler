@@ -1,34 +1,37 @@
-import { SinonSpy, assert, SinonStub, spy } from 'sinon';
+import { assert, SinonSpy, SinonStub, spy } from 'sinon';
 import chai, { expect } from 'chai';
-import { connectDatabase, checkDatabaseExists } from './utils';
+import { checkDatabaseExists, connectDatabase } from './utils';
 import { mockRequest, mockResponse } from './test.utils.spec';
 import mockedEnv, { RestoreFn } from 'mocked-env';
 import mongoUnit from 'mongo-unit';
 import debug from 'debug';
+import { fail } from 'assert';
 
 const logger = debug('testapp:utilities');
 
 chai.should();
 
-describe('Utilities', () => {
+describe.skip('Utilities', () => {
     let mongoUri: string;
     let nextSpy: SinonSpy;
     let mockReq: any;
     let mockRes: any;
     let restore: RestoreFn;
 
-    before((done) => {
-        mongoUnit.start({ port: 9999, verbose: false }).then((testUrl) => {
-            mongoUri = testUrl;
-            done();
-        });
+    before(() => {
+        debug('Launching mongodb instance... ');
+        const init = Date.now();
+        return mongoUnit.start({ port: 9999, dbName: 'test', verbose: false })
+            .then((testUrl) => {
+                debug(`... instance launched successfully in ${Date.now() - init} ms`);
+                mongoUri = testUrl;
+            });
     });
 
-    after((done) => {
-        mongoUnit.stop().then(() => {
+    after(() => {
+        return mongoUnit.stop()/* .then(() => {
             logger('stopping mongodb instance');
-            done();
-        });
+        }) */;
     });
 
     beforeEach((done) => {
@@ -53,13 +56,12 @@ describe('Utilities', () => {
             restore = mockedEnv({
                 MONGO_URI: 'localhost:9999',
             });
-            await connectDatabase(mockReq, mockRes, nextSpy);
-            assert.calledOnce(nextSpy);
 
-            const errValue = nextSpy.lastCall.lastArg;
-            errValue.should.be.ok;
-            errValue.name.should.be.ok;
-            expect(errValue.name).to.equal('MongoParseError');
+            await connectDatabase(mockReq, mockRes, nextSpy);
+            assert.notCalled(nextSpy);
+            assert.calledWith(mockRes.status, 400);
+            assert.calledWithMatch(mockRes.json, { error: 'MongoParseError' })
+
             restore();
         });
 
@@ -81,8 +83,33 @@ describe('Utilities', () => {
     });
 
     describe('checkDatabaseExists helper', () => {
-        it('', async () => {
+        beforeEach(() => {
+            restore = mockedEnv({
+                MONGO_URI: 'mongodb://localhost:9999',
+            });
+
+        });
+        afterEach(() => {
+            restore();
+        });
+
+        it('should not fail when the datase exists', async () => {
+            (mockReq.get as SinonStub).withArgs('Fiware-Service').returns('test');
+            await connectDatabase(mockReq, mockRes, nextSpy);
             await checkDatabaseExists(mockReq, mockRes, nextSpy);
+            assert.calledOnce(nextSpy);
+        });
+
+        it('should fail when the database does not exist', async () => {
+            try {
+                (mockReq.get as SinonStub).withArgs('Fiware-Service').returns('anotherDb');
+                await connectDatabase(mockReq, mockRes, nextSpy);
+                await checkDatabaseExists(mockReq, mockRes, nextSpy);
+                assert.notCalled(nextSpy);
+                fail('expected method to fail');
+            } catch (e) {
+                expect(e).not.to.be.undefined;
+            }
         });
     });
 

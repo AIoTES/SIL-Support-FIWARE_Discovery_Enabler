@@ -87,7 +87,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             } as ConnectionOptions);
-
+            debug('successfully created a connection to the database');
             req.body.connection = connection;
             next();
             resolve();
@@ -96,10 +96,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
             handleMongoConnectionError(err, res);
             resolve();
         }
-
-        // if(err && err.name === 'MongoParseError')
     });
-
 }
 
 /**
