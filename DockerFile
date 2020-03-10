@@ -1,0 +1,46 @@
+#
+#  ----- Base docker image for transpilation -----
+FROM node:12.16.1-alpine3.9 as builder
+WORKDIR /src
+COPY package*.json tsconfig.json .mocharc.json .eslintrc.js ./
+COPY /app ./app/
+# configure node
+RUN npm set progress=false && npm config set depth 0  && \
+    # install prod dependencies
+    npm i --only=production && \
+    # create a copy of production dependencies
+    cp -R node_modules prod_node_modules && \
+    # install all dependencies
+    npm install && \
+    # compile code
+    npx tsc
+
+#
+# ----- Test image -----
+FROM builder as test
+COPY . .
+# RUN npm run test
+
+#
+# ----- Release image -----
+FROM node:12.16.1-alpine3.9 as release
+
+WORKDIR /app
+
+# copy of transpiled app
+COPY --from=builder /src/dist/app ./dist/
+# copy of production dependencies
+COPY --from=builder /src/prod_node_modules ./node_modules
+
+# set default env variables
+ENV PORT=3000
+ENV NODE_ENV=production
+ENV DEBUG=app:*
+
+# RUN npm ci --only=production
+
+EXPOSE $PORT
+
+ENTRYPOINT ["node"]
+
+CMD ["./dist/server.js"]
