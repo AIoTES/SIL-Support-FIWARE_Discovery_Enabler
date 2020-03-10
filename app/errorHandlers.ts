@@ -72,6 +72,22 @@ export function missingParameter(res: Response, param: string): void {
     return badRequest(res, 'MissingParameter', `Parameter '${param}' is mandatory but was not present in the request`);
 }
 
+/**
+ * @swagger
+ *  components:
+ *   responses:
+ *     401Unauthorized:
+ *       description: API_KEY is absent or incorrect
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GenericError'
+ *
+ */
+export function unAuthorizedRequest(res: Response, message: string): void {
+    res.status(401).json({ error: 'UnauthorizedRequest', message } as GenericError);
+}
+
 export function handleMongoConnectionError(err: Error, res: Response): void {
     switch (err.name) {
         case 'MongoServerSelectionError':

@@ -18,11 +18,18 @@ const initTimeStamp: number = Date.now();
 
 const config = ConfigParams();
 
+// verify that a valid mongo connection string was provided
 if (config.mongoUri === '') {
     logger(`ERROR: No ${MONGO_URI} was specified`);
     process.exit(1);
 } else if (!mongoRegex.test(config.mongoUri)) {
     logger(`ERROR: ${MONGO_URI}='${config.mongoUri}' is not a correct mongo connection string`);
+    process.exit(1);
+}
+
+// verify that an API_KEY was consigured
+if (config.apiKey === undefined) {
+    logger('ERROR: an API_KEY needs to be configured for this application');
     process.exit(1);
 }
 

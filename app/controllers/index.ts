@@ -27,10 +27,12 @@ export function RegisterRoutes(app: Application): void {
      *        required: false
      *        schema:
      *          type: integer
-     *        description: unix time indicating the previous check done. This will
+     *        description: unix time (in ms) indicating the previous check done. This will
      *                     filter results based on the creation date field
      *      - $ref: '#/components/parameters/offset'
      *      - $ref: '#/components/parameters/limit'
+     *    security:
+     *      - api_key: []
      *    responses:
      *     '200':
      *       description: success
@@ -43,6 +45,8 @@ export function RegisterRoutes(app: Application): void {
      *             type: array
      *             items:
      *               $ref: '#/components/schemas/Entity'
+     *     '401':
+     *       $ref: '#/components/responses/401Unauthorized'
      *     '403':
      *       $ref: '#/components/responses/403Forbidden'
      */
