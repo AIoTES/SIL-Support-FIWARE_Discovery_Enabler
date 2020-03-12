@@ -27,14 +27,21 @@ if (config.mongoUri === '') {
     process.exit(1);
 }
 
-// verify that an API_KEY was consigured
+// verify that an API_KEY was configured
 if (config.apiKey === undefined) {
     logger('ERROR: an API_KEY needs to be configured for this application');
     process.exit(1);
 }
 
+// verify that an ORION_URL was provided
+if (config.orionUrl === undefined) {
+    logger('ERROR: the public url of orion needs to be configured');
+    process.exit(1);
+}
+
 // parse body
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 // Log request

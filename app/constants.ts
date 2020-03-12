@@ -98,5 +98,7 @@ export const LIMIT_PARAM = 'limit';
 export const SERVICE_PREFIX = 'ORION_SERVICE_PREFIX';
 export const MONGO_URI = 'MONGO_URI';
 
+export const ORION_URL = 'ORION_URL';
+
 export const API_KEY = 'API_KEY';
 

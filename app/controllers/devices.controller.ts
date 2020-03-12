@@ -7,6 +7,7 @@ import { FiwareEntityInterface, FiwareEntitySchema } from '../model/entity';
 import { CONTENT_RANGE, FIWARE_SERVICE, FIWARE_SERVICE_PATH } from '../constants';
 import { Request, Response, Router } from 'express';
 import { Connection, Document, Model } from 'mongoose';
+import cors from 'cors';
 
 const router: Router = Router();
 const logger = debug('app:devices:controller');
@@ -21,6 +22,14 @@ router.use(
     // verify the database for the service exists
     checkDatabaseExists.bind(null),
 );
+
+router.options('/', cors({
+    methods: 'GET',
+    allowedHeaders: 'Content-Type,x-api-key',
+    exposedHeaders: 'content-range',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+}));
 
 router.get('/',
     // verify the Fiware-ServicePath is present or set a default value otherwise
@@ -83,7 +92,6 @@ router.get('/',
             res.status(200).json(result);
         });
     },
-
 );
 
 export const deviceController: Router = router;

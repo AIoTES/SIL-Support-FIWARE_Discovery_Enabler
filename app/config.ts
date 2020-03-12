@@ -1,4 +1,4 @@
-import { SERVICE_PREFIX, MONGO_URI, API_KEY } from './constants';
+import { API_KEY, MONGO_URI, ORION_URL, SERVICE_PREFIX } from './constants';
 
 export const mongoRegex = /^(mongodb:(?:\/{2})?)((\w+?):(\w+?)@|:?@?)(\S+?):(\d+)(\/(\S+?))?(\?replicaSet=(\S+?))?$/;
 
@@ -9,5 +9,6 @@ export const ConfigParams = () => {
         // TODO: validate MONGO_URI
         mongoUri: process.env[MONGO_URI]?.trim() || '',
         apiKey: process.env[API_KEY],
+        orionUrl: process.env[ORION_URL],
     }
 };

@@ -7,6 +7,7 @@ The docker container accepts a series of environment variables that are specific
 |----------|-------------|---------------|
 |HTTP_PORT|Defines the internal port exposed by the server| 3000|
 |MONGO_URI|The mongodb-compliant connection string to the database|```empty```|
+|ORION_URL|The public URL where Orion Context broker is accessible|```empry```|
 |NODE_ENV|A flag to indicate whether the server should run on developemnt (```dev```) or production (```production```) mode|```dev```|
 |API_KEY|A string containing the security token to use this API|```empty```|
 |API_CONTACT_NAME|The identifying name of the contact person/organization||

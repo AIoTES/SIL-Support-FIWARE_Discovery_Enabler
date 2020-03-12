@@ -1,4 +1,4 @@
-import { stub, spy } from 'sinon';
+import { spy, stub } from 'sinon';
 
 export const mockRequest = (options = {}): {} => ({
     body: {},
