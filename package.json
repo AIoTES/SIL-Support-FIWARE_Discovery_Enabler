@@ -1,6 +1,6 @@
 {
   "name": "aiotesenabler",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A minimal enabler to allow integration between AIoTES framework and FIWARE",
   "main": "index.js",
   "config": {
