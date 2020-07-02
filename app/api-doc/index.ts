@@ -13,7 +13,7 @@ const options: Options = {
 
     swaggerDefinition: {
         // the semantic version number of the OpenAPI Specification version that the OpenAPI document uses.
-        openapi: '3.0.0',
+        openapi: '3.0.2',
         // Provides metadata about the API
         info: {
             // the title of the API

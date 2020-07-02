@@ -1,5 +1,13 @@
 # AIOTES FIWARE Enabler
 
+## Background
+
+## Description
+
+## Install
+
+## Running
+
 ## Configuration
 The docker container accepts a series of environment variables that are specific to each deployment.
 
@@ -14,9 +22,22 @@ The docker container accepts a series of environment variables that are specific
 |API_CONTACT_URL|The URL pointing to the contact information||
 |API_CONTACT_EMAIL|The email address of the contact person/organization||
 
+Setting the API_KEY through a docker secret:
+if no env variable ```API_KEY``` is provided, the c
 
+## License
+The AIOTES Fiware Enabler is licensed under the [Affero General Public License (GPL) version 3](https://github.com/telefonicaid/fiware-orion/blob/master/LICENSE).
 
+&copy; 2020 MySphera
 
+### Are there any legal issues with AGPL 3.0? Is it safe for me to use?
 
-server {                                                       server_name mw2mw-aiotes.locs.es;                                                                                                                                                                                                                                              listen 80;                                                                                                                                                                                                                                                                     return 301 https://$host$request_uri;                                                                                                                                                                                                                                  }
+There is absolutely no problem in using a product licensed under AGPL 3.0. Issues with GPL (or AGPL) licenses are mostly related with the fact that different people assign different interpretations on the meaning of the term “derivate work” used in these licenses. Due to this, some people believe that there is a risk in just using software under GPL or AGPL licenses (even without modifying it).
+
+For the avoidance of doubt, the owners of this software licensed under an AGPL-3.0 license wish to make a clarifying public statement as follows:
+
+```
+Please note that software derived as a result of modifying the source code of this software in order to fix a bug or incorporate enhancements is considered a derivative work of the product. Software that merely uses or aggregates (i.e. links to) an otherwise unmodified version of existing software is not considered a derivative work, and therefore it does not need to be released as under the same license, or even released as open source.
+```
+
 

@@ -140,4 +140,5 @@ export interface Subscription {
  *       required:
  *         - entities
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emptyObject = {};

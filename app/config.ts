@@ -6,7 +6,6 @@ export const mongoRegex = /^(mongodb:(?:\/{2})?)((\w+?):(\w+?)@|:?@?)(\S+?):(\d+
 export const ConfigParams = () => {
     return {
         servicePrefix: process.env[SERVICE_PREFIX] || 'orion-',
-        // TODO: validate MONGO_URI
         mongoUri: process.env[MONGO_URI]?.trim() || '',
         apiKey: process.env[API_KEY],
         orionUrl: process.env[ORION_URL],
