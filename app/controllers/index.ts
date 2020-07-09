@@ -1,6 +1,7 @@
 import { Application } from 'express';
 import { deviceController } from './devices.controller';
 import { subscriptionController } from './subscription.controller';
+import { entityController } from './entity.controller';
 
 export function RegisterRoutes(app: Application): void {
 
@@ -129,7 +130,181 @@ export function RegisterRoutes(app: Application): void {
      *           type: string
      *     responses:
      *       '204':
+     *          $ref: '#/components/responses/204NoContent'
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     * components:
+     *   responses:
+     *     204NoContent:
+     *       description: Success, no content provided
+     */
+    app.use('/v2/subscriptions', subscriptionController);
+
+    /**
+     * @swagger
+     * /v2/entities:
+     *   post:
+     *     summary: adds a new entity
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     requestBody:
+     *       description: the entity definiton
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *     responses:
+     *       '201':
+     *          description: entity created successfully
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     *
+     * /v2/entities/{entityId}:
+     *   get:
+     *     summary: returns an entity given its id
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     responses:
+     *       '200':
      *          description: success
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     *     parameters:
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to retrieve
+     *         required: true
+     *         schema:
+     *           type: string
+     *   delete:
+     *     summary: deletes an entity given its id
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     parameters:
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to delete
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       '204':
+     *          $ref: '#/components/responses/204NoContent'
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     * /v2/entities/{entityId}/attrs:
+     *   post:
+     *     summary: update or append entity attributes
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     requestBody:
+     *       description: the entity parameters to add or update
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *     parameters:
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to update
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       '204':
+     *          $ref: '#/components/responses/204NoContent'
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     *   put:
+     *     summary: updates all properties in a entity given its id
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     requestBody:
+     *       description: the entity parameters to update
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *     parameters:
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to update
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       '204':
+     *          $ref: '#/components/responses/204NoContent'
+     *       '307':
+     *          description: temporal redirect
+     *       '400':
+     *          $ref: '#/components/responses/400BadRequest'
+     *       '401':
+     *         $ref: '#/components/responses/401Unauthorized'
+     *   patch:
+     *     summary: update existing entity attributes
+     *     security:
+     *      - api_key: []
+     *     tags:
+     *       - Entities
+     *     requestBody:
+     *       description: the entity parameters to update
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *     parameters:
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to update
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       '204':
+     *          $ref: '#/components/responses/204NoContent'
      *       '307':
      *          description: temporal redirect
      *       '400':
@@ -137,5 +312,5 @@ export function RegisterRoutes(app: Application): void {
      *       '401':
      *         $ref: '#/components/responses/401Unauthorized'
      */
-    app.use('/v2/subscriptions', subscriptionController);
+    app.use('/v2/entities', entityController);
 }
