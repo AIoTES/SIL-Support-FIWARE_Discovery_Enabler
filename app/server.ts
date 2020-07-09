@@ -22,7 +22,7 @@ const config = ConfigParams();
 if (config.mongoUri === '') {
     logger(`ERROR: No ${MONGO_URI} was specified`);
     process.exit(1);
-} else if (!mongoRegex.test(config.mongoUri)) {
+} else if (!mongoRegex.test(config.mongoUri as string)) {
     logger(`ERROR: ${MONGO_URI}='${config.mongoUri}' is not a correct mongo connection string`);
     process.exit(1);
 }

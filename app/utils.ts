@@ -67,7 +67,7 @@ export function verifyParamExists(
         logger(elements);
         if (elements && elements.length > 1) {
             // when multivalue detected, change the param to a regular expression
-            req.query[name] = new RegExp('^(' + elements.join('|').replace('*', '(.*)') + ')$');
+            req.query[name] = (new RegExp('^(' + elements.join('|').replace('*', '(.*)') + ')$')).toString();
         } else if (elements && elements.length === 1) {
             // handle the case when the original param is prepended or appended wit the separatorChar
             req.query[name] = elements[0];
@@ -100,7 +100,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
         const service = req.get(FIWARE_SERVICE);
 
         try {
-            const connection = await mongoose.createConnection(config.mongoUri, {
+            const connection = await mongoose.createConnection(config.mongoUri as string, {
                 bufferCommands: false,
                 autoIndex: false,
                 dbName: [config.servicePrefix, service].join(''),

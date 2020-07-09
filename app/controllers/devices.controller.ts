@@ -48,7 +48,7 @@ router.get('/',
         const skip = Number(req.query.offset);
         const limit = Number(req.query.limit || 0);
         const service = req.get(FIWARE_SERVICE);
-        const lastCheck = req.query.lastCheck;
+        const lastCheck: number = Number(req.query.lastCheck) || 0;
         // filtering parameters
         const query = {
             '_id.type': (req.query.type instanceof RegExp) ? { $regex: req.query.type, $options: 'i' } : req.query.type,

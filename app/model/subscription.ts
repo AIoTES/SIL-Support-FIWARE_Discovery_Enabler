@@ -27,7 +27,7 @@ export interface Subscription {
             headers?: { [key: string]: string };
             qs?: { [key: string]: string };
             method?: string;
-            payload?: object;
+            payload?: Record<string, unknown>;
 
         };
         attrsFormat?: 'normalized' | 'keyValues' | 'values';
