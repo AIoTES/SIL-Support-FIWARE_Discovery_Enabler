@@ -4,3 +4,4 @@ dist
 coverage
 .sonarlint
 .nyc_output
+.vscode
