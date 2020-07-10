@@ -4,7 +4,8 @@
   "description": "A minimal enabler to allow integration between AIoTES framework and FIWARE",
   "main": "index.js",
   "config": {
-    "imageRepo": "aiotes/fiware-enabler"
+    "imageRepo": "aiotes/fiware-enabler",
+    "locsDockerRepo": "registry.locs.es"
   },
   "scripts": {
     "pretsc": "rimraf ./dist",
@@ -16,7 +17,12 @@
     "run-prod": "cross-env NODE_ENV=production DEBUG=app:* node ./dist/app/server.js",
     "run-dev": "cross-env ORION_URL=http://localhost:1026 DEBUG=* MONGO_URI=mongodb://localhost:12017 API_KEY=abcde12345 nodemon app/server.ts",
     "dockerize": "cross-conf-env docker build . -t $npm_package_config_imageRepo:$npm_package_version",
-    "postdockerize": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_imageRepo:latest"
+    "postdockerize": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_imageRepo:latest",
+    "prepush:latest:locs:es": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_locsDockerRepo/$npm_package_config_imageRepo:latest",
+    "push:latest:locs:es": "cross-conf-env docker push $npm_package_config_locsDockerRepo/$npm_package_config_imageRepo:latest",
+    "prepush:version:locs:es": "cross-conf-env docker image tag $npm_package_config_imageRepo:$npm_package_version $npm_package_config_locsDockerRepo/$npm_package_config_imageRepo:$npm_package_version",
+    "push:version:locs:es": "cross-conf-env docker push $npm_package_config_locsDockerRepo/$npm_package_config_imageRepo:$npm_package_version",
+    "push:locs:es": "npm run push:latest:locs:es && npm run push:version:locs:es"
   },
   "author": "Alvaro Martinez <amartinez@mysphera.com>",
   "contributors": [],
