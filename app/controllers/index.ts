@@ -153,6 +153,9 @@ export function RegisterRoutes(app: Application): void {
      *      - api_key: []
      *     tags:
      *       - Entities
+     *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
      *     requestBody:
      *       description: the entity definiton
      *       required: true
@@ -195,12 +198,17 @@ export function RegisterRoutes(app: Application): void {
      *       '401':
      *         $ref: '#/components/responses/401Unauthorized'
      *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
      *       - name: entityId
      *         in: path
      *         description: ID of the entity to retrieve
      *         required: true
      *         schema:
      *           type: string
+     *       - $ref: '#/components/parameters/entityType'
+     *       - $ref: '#/components/parameters/entityAttrs'
+     *       - $ref: '#/components/parameters/entityMetadata'
      *   delete:
      *     summary: deletes an entity given its id
      *     security:
@@ -208,12 +216,15 @@ export function RegisterRoutes(app: Application): void {
      *     tags:
      *       - Entities
      *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
      *       - name: entityId
      *         in: path
      *         description: ID of the entity to delete
      *         required: true
      *         schema:
      *           type: string
+     *       - $ref: '#/components/parameters/entityType'
      *     responses:
      *       '204':
      *          $ref: '#/components/responses/204NoContent'
@@ -238,6 +249,9 @@ export function RegisterRoutes(app: Application): void {
      *           schema:
      *             type: object
      *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
+     *       - $ref: '#/components/parameters/entityType'
      *       - name: entityId
      *         in: path
      *         description: ID of the entity to update
@@ -259,6 +273,16 @@ export function RegisterRoutes(app: Application): void {
      *      - api_key: []
      *     tags:
      *       - Entities
+     *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to update
+     *         required: true
+     *         schema:
+     *           type: string
+     *       - $ref: '#/components/parameters/entityType'
      *     requestBody:
      *       description: the entity parameters to update
      *       required: true
@@ -266,13 +290,6 @@ export function RegisterRoutes(app: Application): void {
      *         application/json:
      *           schema:
      *             type: object
-     *     parameters:
-     *       - name: entityId
-     *         in: path
-     *         description: ID of the entity to update
-     *         required: true
-     *         schema:
-     *           type: string
      *     responses:
      *       '204':
      *          $ref: '#/components/responses/204NoContent'
@@ -288,6 +305,16 @@ export function RegisterRoutes(app: Application): void {
      *      - api_key: []
      *     tags:
      *       - Entities
+     *     parameters:
+     *       - $ref: '#/components/parameters/FiwareService'
+     *       - $ref: '#/components/parameters/FiwareServicePath'
+     *       - name: entityId
+     *         in: path
+     *         description: ID of the entity to update
+     *         required: true
+     *         schema:
+     *           type: string
+     *       - $ref: '#/components/parameters/entityType'
      *     requestBody:
      *       description: the entity parameters to update
      *       required: true
@@ -295,13 +322,6 @@ export function RegisterRoutes(app: Application): void {
      *         application/json:
      *           schema:
      *             type: object
-     *     parameters:
-     *       - name: entityId
-     *         in: path
-     *         description: ID of the entity to update
-     *         required: true
-     *         schema:
-     *           type: string
      *     responses:
      *       '204':
      *          $ref: '#/components/responses/204NoContent'
@@ -311,6 +331,33 @@ export function RegisterRoutes(app: Application): void {
      *          $ref: '#/components/responses/400BadRequest'
      *       '401':
      *         $ref: '#/components/responses/401Unauthorized'
+     * components:
+     *   parameters:
+     *     entityType:
+     *       in: query
+     *       name: type
+     *       required: false
+     *       schema:
+     *         type: string
+     *       description: Entity type, to avoid ambiguity in case there are several entities with the same entity id.
+     *     entityAttrs:
+     *       in: query
+     *       name: attrs
+     *       required: false
+     *       schema:
+     *         type: string
+     *       description: Comma-separated list of attribute names whose data must be included in the response. The attributes
+     *          are retrieved in the order specified by this parameter. See "Filtering out attributes and metadata" section
+     *          for more detail. If this parameter is not included, the attributes are retrieved in arbitrary order, and all
+     *          the attributes of the entity are included in the response.
+     *     entityMetadata:
+     *       in: query
+     *       name: metadata
+     *       required: false
+     *       schema:
+     *         type: string
+     *       description: A list of metadata names to include in the response. See "Filtering out attributes and metadata"
+     *          section for more detail.
      */
     app.use('/v2/entities', entityController);
 }
