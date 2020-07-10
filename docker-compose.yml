@@ -15,9 +15,22 @@ services:
     ports:
       - "13000:3000"
     networks:
-      - test_backend
+      # Make sure the attached networks provide access to Orion and MongoDB
+      - fiware
+      - mongo
+    secrets:
+      # If existing, the secret will have precedence over the API_KEY env variable
+      - apikey
 
 networks:
-  test_backend:
-    name: test_backend
+  fiware:
+    name: Fiware_fiware
     external: true
+  mongo:
+    name: mongo-rs_mongo
+    external: true
+
+secrets:
+  apikey:
+    external: true
+    name: FIWARE_AIOTES_ENABLER_API_KEY
