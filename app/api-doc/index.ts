@@ -13,7 +13,7 @@ const options: Options = {
 
     swaggerDefinition: {
         // the semantic version number of the OpenAPI Specification version that the OpenAPI document uses.
-        openapi: '3.0.0',
+        openapi: '3.0.2',
         // Provides metadata about the API
         info: {
             // the title of the API
@@ -41,9 +41,9 @@ const options: Options = {
             version: process.env.npm_package_version,
         } as ApiInformation,
         /*
-         * An array of Server Objects, which provide connectivity information to a target server. If the
-         * servers property is not provided, or is an empty array, the default value would be a Server Object
-         * with a url value of ```/```.
+          An array of Server Objects, which provide connectivity information to a target server. If the
+          servers property is not provided, or is an empty array, the default value would be a Server Object
+          with a url value of ```/```.
          */
         servers: [],
     },

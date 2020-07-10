@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { assert, SinonSpy, SinonStub, spy } from 'sinon';
 import chai, { expect } from 'chai';
 import { checkDatabaseExists, connectDatabase } from './utils';

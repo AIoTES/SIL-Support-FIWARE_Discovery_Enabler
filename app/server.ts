@@ -22,19 +22,26 @@ const config = ConfigParams();
 if (config.mongoUri === '') {
     logger(`ERROR: No ${MONGO_URI} was specified`);
     process.exit(1);
-} else if (!mongoRegex.test(config.mongoUri)) {
+} else if (!mongoRegex.test(config.mongoUri as string)) {
     logger(`ERROR: ${MONGO_URI}='${config.mongoUri}' is not a correct mongo connection string`);
     process.exit(1);
 }
 
-// verify that an API_KEY was consigured
+// verify that an API_KEY was configured
 if (config.apiKey === undefined) {
     logger('ERROR: an API_KEY needs to be configured for this application');
     process.exit(1);
 }
 
+// verify that an ORION_URL was provided
+if (config.orionUrl === undefined) {
+    logger('ERROR: the public url of orion needs to be configured');
+    process.exit(1);
+}
+
 // parse body
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 // Log request

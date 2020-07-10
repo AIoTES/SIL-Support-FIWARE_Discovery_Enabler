@@ -1,6 +1,6 @@
-import { stub, spy } from 'sinon';
+import { spy, stub } from 'sinon';
 
-export const mockRequest = (options = {}): {} => ({
+export const mockRequest = (options = {}): Record<string, unknown> => ({
     body: {},
     cookies: {},
     query: {},
@@ -10,7 +10,7 @@ export const mockRequest = (options = {}): {} => ({
     ...options
 });
 
-export const mockResponse = (options = {}): {} => {
+export const mockResponse = (options: Record<string, unknown> = {}): Record<string, unknown> => {
     const res = {
         cookie: spy(),
         clearCookie: spy(),

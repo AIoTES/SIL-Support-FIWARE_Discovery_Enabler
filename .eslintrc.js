@@ -9,7 +9,7 @@ module.exports = {
     },
     rules: {
         'max-len': ['error', {
-            'code': 120,
+            'code': 140,
             'ignoreUrls': true,
             'ignoreRegExpLiterals': true,
         }],
@@ -30,7 +30,7 @@ module.exports = {
         'no-empty-function': 'error',
         'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
         'comma-spacing': 'error',
-        'multiline-comment-style': ['error', 'starred-block'],
+        'multiline-comment-style': ['error', 'bare-block'],
         'sort-imports': ['warn', { 'ignoreCase': true, 'ignoreDeclarationSort': true }]
     },
 };

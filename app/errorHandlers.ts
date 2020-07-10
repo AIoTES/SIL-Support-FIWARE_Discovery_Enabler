@@ -1,4 +1,7 @@
 import { ErrorRequestHandler, Request, Response } from 'express';
+import debug from 'debug';
+
+const logger = debug('app:errorHandler');
 
 /**
  * @swagger
@@ -28,8 +31,13 @@ export class GenericError {
 }
 
 export function errorHandler(err: ErrorRequestHandler, req: Request, res: Response): void {
-    console.log(err);
+    logger(`ERROR: unknown error ${err.name}`);
     res.status(500).end({ error: 'Unkwonw error', message: '' } as GenericError);
+}
+
+export function methodNotAllowerError(res: Response, reason: string): void {
+    logger(`ERROR: method not allowed - ${reason}`);
+    res.status(405).json({ error: 'MethodNotAllowed', message: reason } as GenericError);
 }
 
 /**
@@ -42,9 +50,9 @@ export function errorHandler(err: ErrorRequestHandler, req: Request, res: Respon
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/GenericError'
- *
  */
 export function badRequest(res: Response, error: string, reason: string): void {
+    logger(`ERROR: bad request: ${reason}`);
     res.status(400).json({ error, message: reason } as GenericError);
 }
 
@@ -61,6 +69,7 @@ export function badRequest(res: Response, error: string, reason: string): void {
  *
  */
 export function forbiddenRequest(res: Response, error: string, reason: string): void {
+    logger(`ERROR: forbidden resource - ${reason}`);
     res.status(403).json({ error: error, message: reason } as GenericError);
 }
 
@@ -85,6 +94,7 @@ export function missingParameter(res: Response, param: string): void {
  *
  */
 export function unAuthorizedRequest(res: Response, message: string): void {
+    logger(`ERROR: unauthorized request: ${message}`)
     res.status(401).json({ error: 'UnauthorizedRequest', message } as GenericError);
 }
 

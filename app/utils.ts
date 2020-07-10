@@ -67,7 +67,7 @@ export function verifyParamExists(
         logger(elements);
         if (elements && elements.length > 1) {
             // when multivalue detected, change the param to a regular expression
-            req.query[name] = new RegExp('^(' + elements.join('|').replace('*', '(.*)') + ')$');
+            req.query[name] = (new RegExp('^(' + elements.join('|').replace('*', '(.*)') + ')$')).toString();
         } else if (elements && elements.length === 1) {
             // handle the case when the original param is prepended or appended wit the separatorChar
             req.query[name] = elements[0];
@@ -84,7 +84,7 @@ export function verifyParamExists(
  * @param next the next function
  */
 export function logConnectionDetails(req: Request, res: Response, next: NextFunction): void {
-    logger(`incomming connection from ${req.connection.remoteAddress} to ${req.url}`);
+    logger(`DEBUG: incomming connection from ${req.connection.remoteAddress} to ${req.method} ${req.url}`);
     next();
 }
 
@@ -100,7 +100,7 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
         const service = req.get(FIWARE_SERVICE);
 
         try {
-            const connection = await mongoose.createConnection(config.mongoUri, {
+            const connection = await mongoose.createConnection(config.mongoUri as string, {
                 bufferCommands: false,
                 autoIndex: false,
                 dbName: [config.servicePrefix, service].join(''),
@@ -120,18 +120,16 @@ export function connectDatabase(req: Request, res: Response, next: NextFunction)
 }
 
 /**
- *
+ * Helper function that verifies that the proper security tokens have been provided
  * @param req the request object
  * @param res the response object
  * @param next the next function
  */
 export function verifyApiKey(req: Request, res: Response, next: NextFunction): void {
-    logger('verifying API KEY...');
     const apiKey = req.get(X_API_KEY);
     if (apiKey === undefined) {
         // return unauthorised
         badRequest(res, 'AuthError', 'Missing API KEY');
-        //
     } else {
         // validate apiKey
         const config = ConfigParams();
@@ -161,7 +159,6 @@ export async function checkDatabaseExists(req: Request, res: Response, next: Nex
         if (!databases.databases.some((database: { name: string }) => {
             return database.name === [config.servicePrefix, service].join('');
         })) {
-            logger(`****** Database for service ${service} does not exists`);
             forbiddenRequest(res, 'ServiceNotFound', `Service ${service} does not exist on this server instance`);
         } else {
             next();
